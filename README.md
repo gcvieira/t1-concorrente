@@ -1,2 +1,12 @@
-# t1-concorrente
-Trabalho 1 da disciplina de Fundamentos de Processamento Paralelo e Distribuído
+# Summary
+
+- Versão concorrente simples: ```PhilosopherConcurrent.java```
+- Versão com proteção contra deadlock: ```PhilosopherDeadlock.java```
+
+## Requirements
+- Java 11+
+
+## Running the programs
+
+    $ javac *.java
+    $ java Philosophers....
