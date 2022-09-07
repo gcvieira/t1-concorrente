@@ -19,7 +19,8 @@ public class PhilosopherConcurrent implements Runnable {
 	@Override
 	public void run() {
 		try {
-			while (true) {
+			int numeroIteracoes = 1;
+			while (numeroIteracoes <= 5) {
 				// thinking
 				doAction(System.nanoTime() + ": Thinking");
 
@@ -33,6 +34,7 @@ public class PhilosopherConcurrent implements Runnable {
 
 					// Back to thinking
 					doAction( System.nanoTime() + ": Put down left fork. Back to thinking");
+					numeroIteracoes++;
 				}
 			}
 
