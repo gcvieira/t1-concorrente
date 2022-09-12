@@ -51,6 +51,8 @@ public class PhilosopherConcurrent implements Runnable {
 		for (int i = 0; i < forks.length; i++)
 			forks[i] = new Object();
 
+		final long startTime = System.nanoTime();
+
 		for (int i = 0; i < philosophers.length; i++) {
 			Object leftFork = forks[i];
 			Object rightFork = forks[(i + 1) % forks.length];
@@ -60,6 +62,9 @@ public class PhilosopherConcurrent implements Runnable {
 			Thread t = new Thread(philosophers[i], "Philosopher " + (i + 1));
 			t.start();
 		}
+
+		final long totalTime = System.nanoTime() - startTime;
+		System.out.println("Elapsed time (ms): "+ totalTime);
 
 	}
 }

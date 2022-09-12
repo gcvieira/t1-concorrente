@@ -51,8 +51,18 @@ public class PhilosopherLinear {
 
 			philosophers[i] = new PhilosopherLinear(leftFork, rightFork);
 
-			System.out.println("\nPhilosopher "+ i +" "+ philosophers[i]);
+		}
+
+		final long startTime = System.nanoTime();
+
+		// run
+		for (int i = 0; i < philosophers.length; i++) {
+			System.out.println("\nPhilosopher "+ i +"   "+ philosophers[i]);
 			run( philosophers[i] );
 		}
+
+		final long totalTime = System.nanoTime() - startTime;
+		System.out.println("Elapsed time (ms): "+ totalTime);
+
 	}
 }

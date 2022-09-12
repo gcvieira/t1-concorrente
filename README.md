@@ -1,5 +1,6 @@
 # Summary
 
+- Versão linear: ```PhilosopherLinear.java```
 - Versão concorrente simples: ```PhilosopherConcurrent.java```
 - Versão com proteção contra deadlock: ```PhilosopherDeadlock.java```
 
@@ -9,4 +10,8 @@
 ## Running the programs
 
     $ javac *.java
-    $ java Philosophers....
+    $ java Philosopher....
+
+### Running time
+
+    $ time java Philosopher....
