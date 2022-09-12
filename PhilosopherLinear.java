@@ -62,7 +62,7 @@ public class PhilosopherLinear {
 		}
 
 		final long totalTime = System.nanoTime() - startTime;
-		System.out.println("Elapsed time (ms): "+ totalTime);
+		System.out.println("Elapsed time (ns): "+ totalTime);
 
 	}
 }
