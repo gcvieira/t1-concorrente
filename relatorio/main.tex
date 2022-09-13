@@ -7,6 +7,35 @@
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    %basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=3pt,                  
+    %numberstyle=,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -20,28 +49,56 @@ Escola Politécnica \\ PUCRS}}
 \maketitle
 
 \begin{abstract}
-This document is a model and instructions for \LaTeX.
-This and the IEEEtran.cls file define the components of your paper [title, text, heads, etc.]. *CRITICAL: Do Not Use Symbols, Special Characters, Footnotes, 
-or Math in Paper Title or Abstract.
+O trabalho trata da resolução do problema dos filósofos jantando, formulado por Dijkstra em 1965.
+Três resoluções, na linguagem Java, são apresentados para a solução do problema.
 \end{abstract}
 
 \begin{IEEEkeywords}
-filósofos, concorrência, java, Dijkstra, thread, SMT.
+filósofos, concorrência, Java, Dijkstra, thread, SMT.
 \end{IEEEkeywords}
 
-\section{O problema dos filósofos}
+\section*{Introdução}
 
-O problema dos filósofos jantando é um dos problemas clássicos usados para demonstrar os problemas existentes em um programa concorrente.
+O problema dos filósofos jantando é um dos problemas clássicos usados para demonstrar os problemas existentes em um programa concorrente e foi elaborado por Dijkstra em 1965.\cite{wikipedia_2022}
 O problema consiste em cinco filósofos jantando em uma mesa circular, sendo um prato para cada filósofo e um garfo entre cada prato, onde os filósofos pensam e comem simultaneamente.
 \cite{baeldung_java}
 
-\section{Solução concorrente trivial}
+\section{Funcionamento geral das soluções}
 
-aqui falamos sobre a solução inicial.
+Testamos dois programas em Java \cite{baeldung_java} para resolver o problema dos filósofos.
+As duas implementações são uma solução para o problema, rodam rapidamente, mas a versão com proteção de deadlock é mais rápida.
+O motivo para isto é que a solução que faz tratamento do \textit{Deadlock} possui predefinido a ação de cada filosofo com uma melhor configuração,
+enquanto na outra versão acontecem mais disputas pelo recurso, neste caso o garfo, ao longo da execução a tornando menos eficiente.
 
-\section{Proteção contra deadlock}
+\section{Mecanismos usados na sincronização}
+Nas soluções concorrentes, foram utilizadas threads para permitir que os cinco filósofos sejam transformados em processos que podem ser executados de forma simultânea.
+Para sincronizar essas threads, foi usado um mecanismo denominado pelo autor como \textit{monitor}\cite{baeldung_java} que funciona como uma trava.
+Esse sistema garante que enquanto um filósofo pega um garfo o outro filósofo ao seu lado não consegue acessar o mesmo garfo que está bloqueado.
 
-aqui explicamos como o autor resolveu o deadlock.
+\section{Como estes mecanismos são implementados na linguagem escolhida}
+
+A classe \textit{Philosopher} implementa a interface \textit{Runnable} para permitir que executamos cada filósofo como uma thread separada.
+No código em Java, para rodar um thread, precisamos sobreescrever o método \verb|run()| e depois declarar um thread e executar utilizando o método \verb|start()|.
+Para sincronizar o acesso aos garfos é utilizado um bloco de código com a palavra reservada \textit{synchronized} que faz com que este bloco seja travado e o recurso, no caso o garfo, não possa ser acessado por outra thread (outro filósofo) enquanto estiver dentro do bloco.
+
+\section{Como a solução evita Deadlock}
+
+Para resolver o problema do Deadlock, o autor faz com que quatro filósofos peguem o garfo da sua esquerda, exceto o quinto filósofo que pegará o primeiro garfo a sua direita.
+Fazer um dos cinco filósofos pegar na direção oposta dos demais, quebra o \textit{circular wait} que é um dos requisitos para acontecer o deadlock\cite{baeldung_java}.
+O trecho de código \ref{code1}, que está dentro do loop que instancia os filósofos, apresenta a implementação dessa técnica para evitar o problema.
+
+%\begin{verbatim}
+\begin{lstlisting}[language=Java, caption=código que previne Deadlock, label=code1]
+if (i == philosophers.length - 1)
+{
+  // The last philosopher picks up
+  // the right fork first
+  philosophers[i] = new Philosopher(rightFork, leftFork); 
+} else {
+  philosophers[i] = new Philosopher(leftFork, rightFork);
+}
+\end{lstlisting}
+%\end{verbatim}
 
 \section{Análise de tempo e solução sem concorrência}
 
