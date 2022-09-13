@@ -4,10 +4,12 @@
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
-\usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage{graphicx}
 \usepackage{listings}
+
+\graphicspath{ {./images/} }
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -24,7 +26,7 @@
     breakatwhitespace=false,         
     breaklines=true,                 
     captionpos=b,                    
-    keepspaces=true,                 
+    keepspaces=false,                 
     numbers=left,                    
     numbersep=3pt,                  
     %numberstyle=,                  
@@ -87,30 +89,79 @@ Para resolver o problema do Deadlock, o autor faz com que quatro filósofos pegu
 Fazer um dos cinco filósofos pegar na direção oposta dos demais, quebra o \textit{circular wait} que é um dos requisitos para acontecer o deadlock\cite{baeldung_java}.
 O trecho de código \ref{code1}, que está dentro do loop que instancia os filósofos, apresenta a implementação dessa técnica para evitar o problema.
 
+\lstinputlisting[label=code1, frame=single, firstnumber=57, language=Java, firstline=57, lastline=62, caption=Trecho de código que previne deadlock]{./codigos/PhilosopherDeadlock.java}
+
 %\begin{verbatim}
-\begin{lstlisting}[language=Java, caption=código que previne Deadlock, label=code1]
-if (i == philosophers.length - 1)
-{
-  // The last philosopher picks up
-  // the right fork first
-  philosophers[i] = new Philosopher(rightFork, leftFork); 
-} else {
-  philosophers[i] = new Philosopher(leftFork, rightFork);
-}
-\end{lstlisting}
+%\begin{lstlisting}[language=Java, caption=código que previne Deadlock, label=code1]
+%if (i == philosophers.length - 1)
+%{
+%  // The last philosopher picks up
+%  // the right fork first
+%  philosophers[i] = new Philosopher(rightFork, leftFork); 
+%} else {
+%  philosophers[i] = new Philosopher(leftFork, rightFork);
+%}
+%\end{lstlisting}
 %\end{verbatim}
 
 \section{Análise de tempo e solução sem concorrência}
 
-Analisamos o tempo de cada solução e comparamos com a nossa solução (sem concorrência). A nossa deve ser bem mais lenta .
+Para que seja possível fazer uma comparação de tempo de execução fizemos uma versão sequencial, isto é, sem concorrência adaptada do código já existente.
+O tempo foi medido usando o comando time do Linux que retorna o \textit{elapsed time} de qualquer programa quando utilizado antes na linha de execução do terminal.
+As três versões foram executadas em um processador Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i5 3320M @ 2.60GHz com dois núcleos físicos e quatro threads lógicas, 8 GBs de memória principal e rodando Linux Ubuntu 20.04.5 LTS.
+
+O tempo no qual chegamos foi calculado usando a média de três execuções e os resultados estão na tabela \ref{tabelaTempos}.
+
+\begin{table}[h!]
+\begin{tabular}{||c|c|c|c||c||}
+
+\hline
+\textbf{Versão}                                                    & \textbf{Tempo 1} & \textbf{Tempo 2} & \textbf{Tempo 3} & \textbf{Média} \\ \hline
+Sequencial                                                         & 6,170            & 6,230            & 6,267            & \textbf{6,222} \\ \hline
+\begin{tabular}[c]{@{}c@{}}Concorrente\\ simples\end{tabular}      & 3,825            & 4,158            & 3,582            & \textbf{3,855} \\ \hline
+\begin{tabular}[c]{@{}c@{}}Protecão contra\\ deadlock\end{tabular} & 2,305            & 2,867            & 2,453            & \textbf{2,541} \\ \hline
+
+\end{tabular}
+\caption{Tempos de execução}
+\label{tabelaTempos}
+\end{table}
 
 \section{Screenshots}
 
-Dump the screenshots here.
+Seguem \textit{screenshots} da execução dos programas junto com o seu tempo de execução informado real pelo comando \verb|time| do Linux. As Figuras \ref{fig:linear}, \ref{fig:concorrente}, e \ref{fig:deadlock} são referentes à execução da versão linear, concorrente simples e protegida, respectivamente.
+
+\begin{figure}[h!]
+\caption{Execução do código linear}
+\centering
+\includegraphics[width=8cm]{lin}
+\label{fig:linear}
+\end{figure}
+
+\begin{figure}[h!]
+\caption{Execução do código concorrente simples}
+\centering
+\includegraphics[width=8cm]{con}
+\label{fig:concorrente}
+\end{figure}
+
+\begin{figure}[h!]
+\caption{Execução do código com proteção contra deadlock}
+\centering
+\includegraphics[width=8cm]{dea}
+\label{fig:deadlock}
+\end{figure}
+
 
 \section{Código fonte}
 
-Make the source code available here.
+% codigo linear
+\lstinputlisting[language=Java, caption=Código Linear]{./codigos/PhilosopherLinear.java}
+
+% codigo concorrente
+\lstinputlisting[language=Java, caption=Código concorrente simples]{./codigos/PhilosopherConcurrent.java}
+
+% codigo que evita deadlock
+\lstinputlisting[language=Java, caption=Código que previne deadlock]{./codigos/PhilosopherDeadlock.java}
 
 \bibliographystyle{IEEEtran}
 \bibliography{ref} % Entries are in the ref.bib file
