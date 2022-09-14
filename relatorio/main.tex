@@ -80,8 +80,8 @@ Esse sistema garante que enquanto um filósofo pega um garfo o outro filósofo a
 
 \section{Como estes mecanismos são implementados na linguagem escolhida}
 
-A classe \textit{Philosopher} implementa a interface \textit{Runnable} para permitir que executamos cada filósofo como uma thread separada.
-No código em Java, para rodar um thread, precisamos sobreescrever o método \verb|run()| e depois declarar um thread e executar utilizando o método \verb|start()|.
+A classe \textit{Philosopher} implementa a interface \textit{Runnable} para permitir que cada filósofo seja executado como uma thread separada e independente.
+No código em Java, para rodar um thread, precisamos sobrescrever o método \verb|run()| e depois declarar um thread e executar utilizando o método \verb|start()|.
 Para sincronizar o acesso aos garfos é utilizado um bloco de código com a palavra reservada \textit{synchronized} que faz com que este bloco seja travado e o recurso, no caso o garfo, não possa ser acessado por outra thread (outro filósofo) enquanto estiver dentro do bloco.
 
 \section{Como a solução evita Deadlock}
@@ -94,11 +94,12 @@ O trecho de código \ref{code1}, que está dentro do loop que instancia os filó
 
 \section{Análise de tempo e solução sem concorrência}
 
-Para que seja possível fazer uma comparação de tempo de execução fizemos uma versão sequencial, isto é, sem concorrência adaptada do código já existente.
+Para que seja possível fazer uma comparação de tempo de execução implementamos uma versão sequencial, isto é, sem concorrência adaptada do código já existente.
 O tempo foi medido usando o comando time do Linux que retorna o \textit{elapsed time} de qualquer programa quando utilizado antes na linha de execução do terminal.
-As três versões foram executadas em um processador Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i5 3320M @ 2.60GHz com dois núcleos físicos e quatro threads lógicas, 8 GBs de memória principal e rodando Linux Ubuntu 20.04.5 LTS.
+As três versões foram executadas em um processador Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark} i5 3320M @ 2.60GHz com 2 núcleos físicos e 4 threads lógicas, 8 GBs de memória principal e rodando Linux Ubuntu 20.04.5 LTS.
 
-O tempo no qual chegamos foi calculado usando a média de três execuções e os resultados estão na tabela \ref{tabelaTempos}. Como mostra a tabela \ref{tabelaTempos}, a versão sequencial é a mais lenta.
+O tempo foi calculado usando a média de três execuções e os resultados estão na tabela \ref{tabelaTempos}.
+Como mostra a tabela \ref{tabelaTempos}, a versão sequencial é a mais lenta entre as três.
 Isso se dá pelo fato de não haver concorrência, ou seja, enquanto um filósofo faz uma ação os outros quatro apenas esperam.
 Já a versão com proteção contra \textit{deadlock} é em média a mais rápida pelo fato de que a solução possui predefinido a ação de cada filósofo com uma melhor configuração e isso faz com que ocorra a condição de \textit{data race} menos vezes, tornando o código mais eficiente.
 
@@ -143,19 +144,22 @@ Seguem \textit{screenshots} da execução dos programas junto com o seu tempo de
 
 \section{Código fonte}
 
+Seguem os códigos fontes das três versões do programa.
+O código \ref{codSequencial} se refere ao código sequencial, \ref{codConcorrente} ao concorrente simples e \ref{codDeadlock} à versão que previne deadlock.
+
 \bibliographystyle{IEEEtran}
 \bibliography{ref} % Entries are in the ref.bib file
 
 % transforma em coluna única daqui para baixo
 \onecolumn
 
-% codigo linear
-\lstinputlisting[language=Java, caption=Código Linear]{./codigos/PhilosopherLinear.java}
+% codigo sequencial
+\lstinputlisting[label=codSequencial, language=Java, caption=Código Sequencial]{./codigos/PhilosopherLinear.java}
 
 % codigo concorrente
-\lstinputlisting[language=Java, caption=Código concorrente simples]{./codigos/PhilosopherConcurrent.java}
+\lstinputlisting[label=codConcorrente, language=Java, caption=Código concorrente simples]{./codigos/PhilosopherConcurrent.java}
 
 % codigo que evita deadlock
-\lstinputlisting[language=Java, caption=Código que previne \textit{deadlock}]{./codigos/PhilosopherDeadlock.java}
+\lstinputlisting[label=codDeadlock, language=Java, caption=Código que previne \textit{deadlock}]{./codigos/PhilosopherDeadlock.java}
 
 \end{document}
